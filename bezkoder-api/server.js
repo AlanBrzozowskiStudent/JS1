@@ -32,10 +32,10 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
-db.sequelize.sync();
-// drop the table if it already exists
+// Synchronizujemy bazę danych
 db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
+  initial(); // Wywołanie funkcji initial() tutaj
 });
 
 // simple route
@@ -48,6 +48,7 @@ app.get("/", (req, res) => {
 require("./app/routes/turorial.routes")(app);
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/ads.routes")(app);
 
 
 // set port, listen for requests
