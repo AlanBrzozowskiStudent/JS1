@@ -26,6 +26,9 @@ function Header() {
                                 <Nav.Link as={Link} to="/account-settings" className="me-3">
                                     Account
                                 </Nav.Link>
+                                <Nav.Link as={Link} to="/add-new" className="me-3">
+                                    Add new offer
+                                </Nav.Link>
                                 <Button variant="outline-light" onClick={handleLogout}>
                                     Logout
                                 </Button>

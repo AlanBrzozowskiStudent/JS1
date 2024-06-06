@@ -1,34 +1,15 @@
-import Button from 'react-bootstrap/Button';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import AdsList from './AdsList'; // Załóżmy, że ten komponent już istnieje
+import axios from 'axios';
 
-function HomePage() {
-    const isLoggedIn = !!localStorage.getItem('project-js-session');
+const HomePage = () => {
 
-    return (
-        <div>
-            <h1>Witaj na stronie głównej</h1>
-            {isLoggedIn ? (
-                <div>
-                    <Link to="/user-profile">
-                        <Button >Profil użytkownika</Button>
-                    </Link>
-                </div>
-            ) : (
-                <div>
-                    <Link to="/login">
-                    <Button >Zaloguj</Button>
-                    </Link>
-                    <Link to="/signup">
-                    <Button >Rejestracja
-                        
-                    </Button>
-                    </Link>
-                </div>
-                
-            )}
-        </div>
-    );
-}
+  return (
+    <div>
+      <h1>Strona główna</h1>
+      <AdsList/>
+    </div>
+  );
+};
 
 export default HomePage;
