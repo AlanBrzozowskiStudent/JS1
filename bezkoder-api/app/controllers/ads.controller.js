@@ -6,7 +6,7 @@ const path = require('path');
 
 // Configure multer storage
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage }).array('images', 5); // Allow up to 5 images
+const upload = multer({ storage: storage }).array('images', 3); // Allow up to 5 images
 
 // Create and Save a new Ad
 exports.create = (req, res) => {
@@ -108,36 +108,38 @@ exports.update = (req, res) => {
 
         const updateFields = req.body;
 
-        if (req.files) {
-            // Convert images to base64 if there are new images
+        // Only update images if there are new images provided
+        if (req.files && req.files.length > 0) {
             const images = req.files.map(file => {
                 return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
             });
             updateFields.images = images;
         }
 
+        // Proceed to update the database entry
         Ad.update(updateFields, {
             where: { id: id }
         })
-            .then(num => {
-                if (num == 1) {
-                    res.send({
-                        message: "Ad was updated successfully."
-                    });
-                } else {
-                    res.send({
-                        message: `Cannot update Ad with id=${id}. Maybe Ad was not found or req.body is empty!`
-                    });
-                }
-            })
-            .catch(err => {
-                console.error('Error updating Ad:', err);
-                res.status(500).send({
-                    message: err.message || "Error updating Ad with id=" + id
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Ad was updated successfully."
                 });
+            } else {
+                res.send({
+                    message: `Cannot update Ad with id=${id}. Maybe Ad was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch(err => {
+            console.error('Error updating Ad:', err);
+            res.status(500).send({
+                message: err.message || "Error updating Ad with id=" + id
             });
+        });
     });
 };
+
 
 // Delete an Ad with the specified id in the request
 exports.delete = (req, res) => {
