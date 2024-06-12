@@ -9,13 +9,14 @@ const app = express();
 //   origin: process.env.CLIENT_ORIGIN || "http://localhost:8081"
 // };
 const corsOptions = {
-  origin: '*'
+  origin: 'http://localhost:3000', // Ustaw to na odpowiedni adres URL twojego frontendu
+  credentials: true, // Pozwala na wysyłanie ciasteczek i uwierzytelnianie HTTP
 };
 
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
@@ -43,10 +44,17 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to main api page." });
 });
 
+// Middleware to verify token on all routes except sign in and sign up
+const { verifyToken } = require("./app/middleware/authJwt");
 
-// routes
-require("./app/routes/turorial.routes")(app);
+// Routes that do not require authentication
 require("./app/routes/auth.routes")(app);
+
+// Apply verifyToken middleware to all routes after this point
+app.use(verifyToken);
+
+// Routes that require authentication
+require("./app/routes/turorial.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/ads.routes")(app);
 
