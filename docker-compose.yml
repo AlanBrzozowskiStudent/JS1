@@ -18,7 +18,7 @@ services:
   bezkoder-api:
     depends_on:
       - mysqldb
-    build: ./bezkoder-api
+    build: ./backend
     restart: unless-stopped
     env_file: ./.env
     ports:
@@ -32,7 +32,7 @@ services:
       - CLIENT_ORIGIN=$CLIENT_ORIGIN
     networks:
       - backend
-      - frontend
+
 
 
 volumes: 
@@ -40,4 +40,3 @@ volumes:
 
 networks:
   backend:
-  frontend:
